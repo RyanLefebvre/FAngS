@@ -1,0 +1,7 @@
+<div *ngIf='showLoader()'>
+    <app-spinner-wheel ></app-spinner-wheel>
+</div>
+<ng-content *ngIf='showSuccessComponent()'>
+</ng-content>
+<app-error-page *ngIf='showFailureComponent()' [errorResponse]='this.error'>
+</app-error-page>

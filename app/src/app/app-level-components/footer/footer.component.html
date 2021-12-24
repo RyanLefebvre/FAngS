@@ -1,0 +1,50 @@
+<div class='footerBigWrapper'>
+  <div class='flexMaster'>
+    <div class='leftChild footerWrapperChild'>
+      <div class='textureHolder'>
+        <img class='leftFooterLogo appGradientBackgroundColor' src='./assets/logo.png' alt='Company logo for footer'>
+      </div>
+      <div class='imageSubtext'> {{this.textService.text.followUs}} </div>
+      <table class='appSocialTable'>
+        <tr>
+          <td>
+            <a href='/'>
+              <i class='fab fa-youtube appHoverText fa-spin-hover'></i>
+            </a>
+          </td>
+          <td>
+            <a href='/'>
+              <i class='fab fa-instagram-square appHoverText fa-spin-hover'></i>
+            </a>
+          </td>
+          <td>
+            <a href='/'>
+              <i class='fab fa-linkedin appHoverText fa-spin-hover'></i>
+            </a>
+          </td>
+        </tr>
+      </table>
+    </div>
+    <div class='middleChild footerWrapperChild'>
+      <ul class='middleChildList'>
+        <li><a class='appHoverText'
+            routerLink='{{this.routesService.paths.terms}}'>{{this.textService.text.termsOfService}}</a></li>
+        <li><a class='appHoverText'
+            routerLink='{{this.routesService.paths.privacy}}'>{{this.textService.text.privacyPolicy}}</a></li>
+      </ul>
+    </div>
+    <div class='rightChild footerWrapperChild'>
+      <div class='contact'> {{this.textService.text.contactUs}} </div>
+      <div class='contactInfo'> <span>
+          <a href='mailto:{{this.textService.text.supportEmail}}'><i
+              class='fa fa-envelope appHoverText fa-spin-hover contactMail'></i></a></span>
+        <a class='appHoverText email' href='mailto:{{this.textService.text.supportEmail}}'>
+          {{this.textService.text.supportEmail}}
+        </a>
+      </div>
+      <div class='copyright'>
+        {{this.textService.text.copyright}} {{this.textService.text.organizationName}} {{this.currentYear}}
+      </div>
+    </div>
+  </div>
+</div>

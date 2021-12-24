@@ -1,0 +1,62 @@
+.operationMessage {
+  text-align: center;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.submitButton,
+.blueButton {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+}
+
+app-spinner-wheel {
+  display: block;
+  margin: auto;
+}
+
+.errorText {
+  color: red;
+  font-style: italic;
+  text-align: center;
+  min-height: 25px;
+}
+
+.login-main {
+  overflow-y:auto;
+}
+
+.blueButton {
+  margin-top: 10px;
+}
+
+#deleteMessage{
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+}
+
+form{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+  min-height:200px;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  width:100%;
+}
+
+.spinnerMessage{
+  font-style:italic;
+  font-weight: bold;
+  width:100%;
+  text-align: center;
+  font-size: small;
+}
+
+.formFieldFlexWrapper{
+  width:80%;
+  min-width:280px;
+}

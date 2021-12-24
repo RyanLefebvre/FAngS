@@ -1,0 +1,20 @@
+<div class="errorPageWrapper">
+    <div class='header'>
+        <h1>
+            {{this.textService.text.errorPageHeader}}
+        </h1>
+    </div>
+    <div class="errorRobotWrapper">
+        <div class="errorObjectWrapper">
+            <h1 class='errorCode appThemeText'>
+                {{this.errorResponse.code}}
+            </h1>
+            <h2 class='errorMessage'>
+                {{this.errorResponse.error.message}}
+            </h2>
+        </div>
+        <div class="imageWrapper">
+            <img src="./assets/confusedRobot.gif" alt="confused robot" />
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+<div class='wrapper'>
+    <app-fetcher *ngIf='this.uid' [fetch]='fetchUser' [context]='this' [fetchInput]='uid'
+        (onFetchResponse)='this.onFetchResponse($event)'>
+        <app-user-properties [user]='user'>
+        </app-user-properties>
+    </app-fetcher>
+</div>

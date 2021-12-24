@@ -1,0 +1,116 @@
+<form [formGroup]='registerForm' (ngSubmit)='handleSubmit()'>
+  <div fxLayout='row' fxLayoutAlign='center center' class='register-main'>
+    <mat-card class='mainContent'>
+      <mat-card-header class='noMarginHeaderText'>
+        <mat-card-title>
+          <h1 class='registerTitle'>
+            <mat-icon class='appThemeText'>touch_app</mat-icon>{{this.textService.text.signUpPageTitle}}.
+          </h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <div class='demoMessage'>
+        {{this.textService.text.infoRequired}}.
+        <span class="appThemeText"></span>
+      </div>
+      <mat-card-content fxLayout='column'>
+        <!---------------------------- Username and email --------------------------->
+        <div class='saveSpace'>
+          <div class='formFieldWrapper'>
+            <mat-form-field>
+              <div class='appThemeText formFieldHeader'>{{this.textService.text.username}}</div>
+              <input type='text' autocomplete='new-username' [formControlName]='FORM_CONTROL_USERNAME' matInput
+                maxlength='25'>
+              <mat-icon style='float:right;'>perm_identity</mat-icon>
+              <mat-error>
+                {{this.textService.text.usernameRequiredExplained}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class='formFieldWrapper'>
+            <mat-form-field>
+              <div class='appThemeText formFieldHeader'>{{this.textService.text.email}}</div>
+              <input type='text' [formControlName]='FORM_CONTROL_EMAIL' matInput maxlength='256'>
+              <mat-icon style='float:right;'>email</mat-icon>
+              <mat-error>
+                {{this.textService.text.emailRequiredError}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <!---------------------------- Password initial and repeat --------------------------->
+        <div class='saveSpace'>
+          <div class='formFieldWrapper'>
+            <mat-form-field>
+              <div class='appThemeText formFieldHeader'>{{this.textService.text.password}}</div>
+              <input autocomplete='new-password' [formControlName]='FORM_CONTROL_PASSWORD' type='password' matInput
+                minlength='7' maxlength='256'>
+              <mat-icon style='float:right;'>security</mat-icon>
+              <mat-error>
+                {{this.textService.text.passwordRequiredExplained}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class='formFieldWrapper'>
+            <mat-form-field>
+              <div class='appThemeText formFieldHeader'>{{this.textService.text.repeatPassword}}</div>
+              <input autocomplete='new-password' [formControlName]='FORM_CONTROL_PASSWORD_CONFIRMATION' type='password'
+                matInput minlength='7' maxlength='256'>
+              <mat-icon style='float:right;'>security</mat-icon>
+              <mat-error>
+                {{this.textService.text.passwordRequiredExplained}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='saveSpace'>
+          <div class='formFieldWrapper'>
+            <mat-form-field>
+              <div class='appThemeText formFieldHeader'>{{this.textService.text.howDidYouHearAboutUs}}</div>
+              <input type='text' maxlength='140' matInput [formControlName]='FORM_CONTROL_HEARD_ABOUT'>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='termsContentWrapper'>
+          <mat-checkbox [formControlName]='FORM_CONTROL_AGREE_TO_TERMS' class='terms' *ngIf='showSpinner == false '>
+            {{this.textService.text.agreeToTerms}}
+          </mat-checkbox>
+          <div class='viewTerms appHoverText' (click)='openTerms()' *ngIf='showSpinner == false '>
+            &nbsp;&nbsp;&nbsp;&nbsp;{{this.textService.text.viewTerms}}
+          </div>
+        </div>
+      </mat-card-content>
+      <div class='buttonGroup'>
+        <button *ngIf='showSpinner == false' type='submit' mat-raised-button
+          [disabled]='!registerForm.valid || !userAgreesToTerms()' class='buttonGroupButton'>
+          <div class='buttonFlexManager' fxLayout='row'>
+            <div class='buttonIconWrapper'>
+              <mat-icon>
+                touch_app
+              </mat-icon>
+            </div>
+            <div class='buttonTextWrapper'>
+              &nbsp; {{this.textService.text.signUp}}
+            </div>
+          </div>
+        </button>
+      </div>
+      <div class='errorMessage' *ngIf='showSpinner == false && hasErrorMessage()'>{{errorMessage}}</div>
+    </mat-card>
+  </div>
+</form>
+<!-- Circles -->
+<div class='area'>
+  <ul class='circles appGradientBackgroundColor'>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</div>

@@ -1,0 +1,34 @@
+.logTitle {
+    width: 100%;
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .logTitle mat-icon {
+    float: left;
+  }
+  
+  .realTitle {
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    font-size:medium;
+  }
+  
+  .wrapper {
+    text-align: center;
+  }
+  
+
+  .message{
+      width:85%;
+      display:block;
+      margin:auto;
+      min-width:260px;
+      margin-top:10px;
+  }
+
+  .content{
+      margin-top:10px;
+  }

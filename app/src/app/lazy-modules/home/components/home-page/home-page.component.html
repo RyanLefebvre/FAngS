@@ -1,0 +1,71 @@
+<div class="forceBigHeight appGradientBackgroundColor">
+  <div class="wrapper">
+    <div class="logoWrapper">
+      <img class='logo' src="./assets/logo.png">
+    </div>
+    <div class="buttons" *ngIf="!this.auth.isAuthenticated()">
+      <h3>{{this.textService.text.newToApplication}} {{this.textService.text.applicationName}} ?</h3>
+      <div class="buttonGroup">
+        <button mat-raised-button type="button" class="buttonGroupButton" (click)="this.goToRegister()">
+          <div class='buttonFlexManager' fxLayout="row">
+            <div class='buttonIconWrapper'>
+              <mat-icon>
+                touch_app</mat-icon>
+            </div>
+            <div class='buttonTextWrapper'>
+              &nbsp;{{this.textService.text.signUp}}
+            </div>
+          </div>
+        </button>
+      </div>
+      <h3>{{this.textService.text.alreadyRegistered}} ?</h3>
+      <div class="buttonGroup">
+        <button mat-raised-button type="button" class="buttonGroupButton" (click)="this.goToSignIn()">
+          <div class='buttonFlexManager' fxLayout="row">
+            <div class='buttonIconWrapper'>
+              <mat-icon>
+                perm_identity</mat-icon>
+            </div>
+            <div class='buttonTextWrapper'>
+              &nbsp;{{this.textService.text.signIn}}
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class="buttons" *ngIf="this.auth.isAuthenticated()">
+      <h3>{{this.textService.text.goToApp}}</h3>
+      <div class="buttonGroup">
+        <button mat-raised-button type="button" class="buttonGroupButton" (click)="this.goToDash()">
+          <div class='buttonFlexManager' fxLayout="row">
+            <div class='buttonIconWrapper'>
+              <mat-icon>dashboard</mat-icon>
+            </div>
+            <div class='buttonTextWrapper'>
+              &nbsp;{{this.textService.text.dashboard}}
+            </div>
+          </div>
+        </button>
+      </div>
+    </div>
+    <div class=" termsAndPP">
+      <span class="appThemeText"
+        (click)="goToTerms()">{{this.textService.text.termsOfService}}</span>&nbsp;and&nbsp;<span
+        (click)="goToPrivacy()" class="appThemeText">{{this.textService.text.privacyPolicy}}</span>
+    </div>
+    <div class="area appGradientBackgroundColor">
+      <ul class="circles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+<app-dialog-wrapper [icon]="'perm_identity'" [title]="data.operationMessage" [message]="wrapperMessage">
+  <form [formGroup]="authenticateForm" (ngSubmit)="handleSubmit()">
+
+    <div fxLayout="column" class="formFieldFlexWrapper">
+      <div class='operationMessage'> </div>
+      <mat-form-field class='email' *ngIf="!showSpinner">
+        <input type="text" autocomplete="username" [formControlName]="FORM_CONTROL_USERNAME" matInput required
+          maxlength="256">
+        <mat-placeholder>{{this.textService.text.email}}</mat-placeholder>
+        <mat-icon style="float:right;">email</mat-icon>
+        <mat-error>
+          {{this.textService.text.emailRequiredError}}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class='password' *ngIf="!showSpinner">
+        <input autocomplete="password" [formControlName]="FORM_CONTROL_PASSWORD" type="password" matInput required
+          maxlength="256">
+        <mat-placeholder>{{this.textService.text.password}}</mat-placeholder>
+        <mat-icon style="float:right;">security</mat-icon>
+        <mat-error>
+          {{this.textService.text.passwordRequiredError}}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="errorText">
+      <span *ngIf="showErrorMessage">* {{errorMessage}}</span>
+      <br><br>
+    </div>
+
+    <div class="buttonGroup" *ngIf="!showSpinner">
+      <button type="submit" mat-raised-button class="submitButton" [disabled]="!authenticateForm.valid">
+        <div class='buttonFlexManager' fxLayout="row">
+          <div class='buttonIconWrapper'>
+            <mat-icon>verified_user</mat-icon>
+          </div>
+          <div class='buttonTextWrapper'>
+            &nbsp; {{this.textService.text.reauthenticate}}
+          </div>
+        </div>
+      </button>
+
+
+      <button class="blueButton buttonGroupButton" mat-raised-button (click)="closeDialog(false)">
+        <div class='buttonFlexManager' fxLayout="row">
+          <div class='buttonIconWrapper'>
+            <mat-icon>cancel_presentation</mat-icon>
+          </div>
+          <div class='buttonTextWrapper'>
+            &nbsp;
+            {{this.textService.text.close}}
+          </div>
+        </div>
+      </button>
+    </div>
+  </form>
+  <app-spinner-wheel *ngIf="showSpinner" [spinnerMessage]="this.textService.text.authSpinnerMessage">
+  </app-spinner-wheel>
+
+</app-dialog-wrapper>

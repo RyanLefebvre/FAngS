@@ -1,0 +1,28 @@
+<app-dialog-wrapper [icon]="'delete'" [title]="this.textService.text.delete" [message]="this.data.message">
+  <div class="buttonGroup" *ngIf="!showSpinner">
+    <button class="buttonGroupButton" [disabled]="showSpinner" mat-raised-button (click)="confirm()"
+      [ngClass]=" { 'redButton' : !showSpinner , 'disabledButton' : showSpinner  }">
+      <div class='buttonFlexManager' fxLayout="row">
+        <div class='buttonIconWrapper'>
+          <mat-icon>delete_forever</mat-icon>
+        </div>
+        <div class='buttonTextWrapper'>
+          &nbsp; {{this.textService.text.delete}}
+        </div>
+      </div>
+    </button>
+    <button class="buttonGroupButton" [disabled]="showSpinner" mat-raised-button (click)="closeDialog()"
+      [ngClass]=" { 'blueButton' : !showSpinner , 'disabledButton' : showSpinner  }">
+      <div class='buttonFlexManager' fxLayout="row">
+        <div class='buttonIconWrapper'>
+          <mat-icon>cancel_presentation</mat-icon>
+        </div>
+        <div class='buttonTextWrapper'>
+          &nbsp; {{this.textService.text.close}}
+        </div>
+      </div>
+    </button>
+  </div>
+  <app-spinner-wheel class="spinnerWrapper" *ngIf="showSpinner" [spinnerMessage]="this.data.spinnerMessage">
+  </app-spinner-wheel>
+</app-dialog-wrapper>

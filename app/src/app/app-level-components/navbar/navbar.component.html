@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <!-- Web Nav -->
+  <mat-toolbar>
+    <mat-toolbar-row>
+      <button mat-icon-button (click)="sidenav.toggle()" fxHide.gt-sm>
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="menu-spacer"></span>
+      <div class="menuItems" fxShow="true" fxHide.lt-md>
+        <ng-container *ngFor="let route of routesService.routes">
+          <a routerLink="{{route.path}}" *ngIf="route.canAccess(this.auth.isAuthenticated())">
+            {{route.name}}<mat-icon>{{route.icon}}</mat-icon>&nbsp;
+          </a>
+        </ng-container>
+      </div>
+    </mat-toolbar-row>
+  </mat-toolbar>
+  <!-- Sliding side nav -->
+  <mat-sidenav-container>
+    <mat-sidenav #sidenav [autoFocus]="false">
+      <mat-nav-list class="sideBar">
+        <a (click)="sidenav.toggle()" mat-list-item>
+          <mat-icon>highlight_off</mat-icon>Close
+        </a>
+        <ng-container *ngFor="let route of routesService.routes">
+          <a routerLink="{{route.path}}" *ngIf="route.canAccess(this.auth.isAuthenticated())" mat-list-item>
+            <mat-icon>{{route.icon}}</mat-icon>{{route.name}}
+          </a>
+        </ng-container>
+      </mat-nav-list>
+    </mat-sidenav>
+    <div class="fill-content">
+      <ng-content></ng-content>
+    </div>
+  </mat-sidenav-container>
+</div>

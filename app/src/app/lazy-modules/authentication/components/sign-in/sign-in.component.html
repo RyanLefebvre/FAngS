@@ -1,0 +1,83 @@
+<form [formGroup]="authenticateForm" (ngSubmit)="handleSubmit()">
+  <div class="fillHeight">
+    <div fxLayout="row" fxLayoutAlign="center center" class="login-main">
+      <mat-card class='mainContent'>
+        <mat-card-header class='noMarginHeaderText'>
+          <mat-card-title>
+            <h1>
+              <mat-icon class='appThemeText'>perm_identity</mat-icon>{{this.textService.text.signIn}}
+            </h1>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-divider></mat-divider>
+        <div class="errorText" *ngIf="showErrorMessage">
+          * {{errorMessage}}
+        </div>
+        <mat-card-content fxLayout="column">
+          <mat-form-field class='email'>
+            <input type="text" autocomplete="username" [formControlName]="FORM_CONTROL_USERNAME" matInput required
+              maxlength="256">
+            <mat-placeholder>Email</mat-placeholder>
+            <mat-icon style="float:right;color: #c0c0c0;">email</mat-icon>
+            <mat-error>
+              {{this.textService.text.emailRequiredError}}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class='password'>
+            <input autocomplete="password" [formControlName]="FORM_CONTROL_PASSWORD" type="password" matInput required
+              maxlength="256">
+            <mat-placeholder>Password</mat-placeholder>
+            <mat-icon style="float:right;color: #c0c0c0;">security</mat-icon>
+            <mat-error>
+              {{this.textService.text.passwordRequiredError}}
+            </mat-error>
+          </mat-form-field>
+        </mat-card-content>
+        <div class='buttonGroup'>
+          <app-spinner-wheel *ngIf='showSpinner' [spinnerMessage]="this.spinnerMessage">
+          </app-spinner-wheel>
+          <button type="submit" mat-raised-button [disabled]="!authenticateForm.valid" class='buttonGroupButton'
+            *ngIf="!showSpinner">
+            <div class='buttonFlexManager' fxLayout="row">
+              <div class='buttonIconWrapper'>
+                <mat-icon>
+                  verified_user
+                </mat-icon>
+              </div>
+              <div class='buttonTextWrapper'>
+                &nbsp; {{this.textService.text.signIn}}
+              </div>
+            </div>
+          </button>
+        </div>
+        <div class="clickToReg" *ngIf="!showSpinner">{{this.textService.text.dontHaveAnAccount}}
+          <br>
+          <a class="appThemeText" (click)='this.routesService.navigate([this.routesService.paths.register])'>
+            {{this.textService.text.clickHereToRegister}}
+          </a>
+        </div>
+        <div *ngIf="showReset">
+          <mat-divider>
+          </mat-divider>
+          <div class="clickToReg">{{this.textService.text.forgotPassword}} <br>
+            <span class="appThemeText">
+              <a (click)="resetPassword()" style="cursor: pointer;">
+                {{this.textService.text.clickHereToReset}}
+              </a>
+            </span>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+</form>
+<div class="waveWrapper waveAnimation appGradientBackgroundColor">
+  <div class="waveWrapperInner bgMiddle">
+    <div class="wave waveMiddle" style="background-image: url('./assets/homepage/wave-mid.png')">
+    </div>
+  </div>
+  <div class="waveWrapperInner bgBottom">
+    <div class="wave waveBottom" style="background-image: url('./assets/homepage/wave-bot.png')">
+    </div>
+  </div>
+</div>

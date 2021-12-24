@@ -1,0 +1,191 @@
+<div class="maxWidth">
+  <div class='loadedUserInfo' *ngIf='this.profileEditForm'>
+    <div fxLayout="row" fxLayoutAlign="center" class="wrapper">
+      <form [formGroup]="profileEditForm" (ngSubmit)="handleSubmit()">
+        <mat-card>
+          <mat-card-content>
+            <div class="display">
+              <div class="userCreatedActiveFlex">
+                <div class='createdActive'>
+                  <div class='userCreated'>
+                    <div class='appThemeText'>{{this.textService.text.createdAt}}:</div>
+                    <div>{{ this.user?.dateCreated | date: 'M/d/yy, h:mm a'}}</div>
+                  </div>
+                  <div class='userActive'>
+                    <div class='appThemeText'>{{this.textService.text.lastEdit}}:</div>
+                    <div>{{this.user?.lastEdit | date: 'M/d/yy, h:mm a'}}</div>
+                  </div>
+                </div>
+                <div class="profIcon">
+                  <mat-icon class="appThemeText">perm_identity</mat-icon>
+                </div>
+              </div>
+              <mat-divider></mat-divider>
+              <table class='displayTable'>
+                <tr>
+                  <td class='appThemeText userProperty'>
+                    {{this.textService.text.username}}
+                  </td>
+                  <td class='userProperty'>
+                    <div *ngIf='!this.isEditing'>
+                      <mat-form-field class='noPaddingFormField'
+                        [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }">
+                        <input matInput [formControlName]="FORM_CONTROL_DISPLAY_USERNAME"
+                          [disableControl]='disableUserProfileFormControls()'>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf='this.isEditing'>
+                      <mat-form-field class='noPaddingFormField'
+                        [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }">
+                        <input matInput [formControlName]='FORM_CONTROL_USERNAME' type='text'
+                          [disableControl]='disableUserProfileFormControls()'>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                </tr>
+                <mat-divider></mat-divider>
+                <tr>
+                  <td class='appThemeText userProperty'>{{this.textService.text.profileVisibility}}</td>
+                  <td>
+                    <div *ngIf='!this.isEditing'>
+                      <mat-form-field class='noPaddingFormField'
+                        [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }">
+                        <mat-select [disableControl]='disableUserProfileFormControls()'
+                          [formControlName]="FORM_CONTROL_DISPLAY_PROF_VISIBILITY"
+                          [ngClass]=" { 'editSelects' : !isEditing || showSpinner}" class="lsThemeText"
+                          style="text-align:center">
+                          <mat-option *ngFor="let profVisibility of prof.getProfileVisibilityFormControls()"
+                            [value]="profVisibility.value">
+                            {{profVisibility.displayName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div *ngIf='this.isEditing'>
+                      <mat-form-field class='hideUnderLineWhenDisabled'
+                        [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }">
+                        <mat-select [disableControl]='disableUserProfileFormControls()'
+                          [formControlName]="FORM_CONTROL_PROF_VISIBILITY"
+                          [ngClass]=" { 'editSelects' : !isEditing || showSpinner}" class="lsThemeText"
+                          style="text-align:center">
+                          <mat-option *ngFor="let profVisibility of prof.getProfileVisibilityFormControls()"
+                            [value]="profVisibility.value">
+                            {{profVisibility.displayName}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                </tr>
+                <mat-divider></mat-divider>
+                <tr>
+                  <td class='appThemeText userProperty'>
+                    {{this.textService.text.email}}
+                  </td>
+                  <td colspan='2' class='userPropertyValue'>
+                    <mat-form-field class='emailInput noPaddingFormField'
+                      [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }"
+                      *ngIf="!this.isEditing">
+                      <input matInput [disableControl]='disableUserProfileFormControls()'
+                        [formControlName]="FORM_CONTROL_DISPLAY_EMAIL">
+                    </mat-form-field>
+                    <mat-form-field class='emailInput noPaddingFormField'
+                      [ngClass]="{ 'hideUnderLineWhenDisabled' : disableUserProfileFormControls() }"
+                      *ngIf="this.isEditing">
+                      <input matInput [disableControl]='disableUserProfileFormControls()'
+                        [formControlName]="FORM_CONTROL_EMAIL">
+                    </mat-form-field>
+                  </td>
+                </tr>
+                <mat-divider *ngIf='canEdit()'></mat-divider>
+              </table>
+            </div>
+            <div class='emailChangedSubtext' *ngIf='showEmailChangeSuccess'>
+              {{this.textService.text.emailChangeSuccess}}
+            </div>
+            <div class='emailChangedSubtext' *ngIf='showEmailChangeFailure'>
+              {{this.textService.text.emailChangeFailure}}
+            </div>
+            <div class='buttonGroup profEditGroup' *ngIf='canEdit()'>
+              <app-spinner-wheel *ngIf="showSpinner" [spinnerMessage]="this.textService.text.updatingProfileLoading">
+              </app-spinner-wheel>
+              <button type="button" class="buttonGroupButton" mat-raised-button *ngIf="!this.isEditing;"
+                (click)="toggleProfileFormEdit()">
+                <div class='buttonFlexManager' fxLayout="row">
+                  <div class='buttonIconWrapper'>
+                    <mat-icon>edit</mat-icon>
+                  </div>
+                  <div class='buttonTextWrapper'>
+                    &nbsp; {{this.textService.text.editProfile}}
+                  </div>
+                </div>
+              </button>
+              <button type="button" class="buttonGroupButton" mat-raised-button *ngIf="!this.isEditing;"
+                (click)="openPasswordReset()">
+                <div class='buttonFlexManager' fxLayout="row">
+                  <div class='buttonIconWrapper'>
+                    <mat-icon>security</mat-icon>
+                  </div>
+                  <div class='buttonTextWrapper'>
+                    &nbsp; {{this.textService.text.resetPassword}}
+                  </div>
+                </div>
+              </button>
+              <button type="button" mat-raised-button *ngIf=" !this.isEditing;" class="redButton buttonGroupButton"
+                (click)="this.auth.logOutGoHome(this.textService.text.signOutSuccessMessage)">
+                <div class='buttonFlexManager' fxLayout=" row">
+                  <div class='buttonIconWrapper'>
+                    <mat-icon>remove_circle</mat-icon>
+                  </div>
+                  <div class='buttonTextWrapper'>
+                    &nbsp; {{this.textService.text.signOut}}
+                  </div>
+                </div>
+              </button>
+              <button type="submit" [disabled]="!profileEditForm.valid" mat-raised-button
+                *ngIf="showConfirmationAndCloseButton()" class='buttonGroupButton'
+                [ngClass]=" { 'greenButton' : profileEditForm.valid , 'disabledButton' : !profileEditForm.valid }">
+                <div class='buttonFlexManager' fxLayout="row">
+                  <div class='buttonIconWrapper'>
+                    <mat-icon>done_outline</mat-icon>
+                  </div>
+                  <div class='buttonTextWrapper'>
+                    &nbsp; {{this.textService.text.confirm}}
+                  </div>
+                </div>
+              </button>
+              <button type="button" mat-raised-button *ngIf="showConfirmationAndCloseButton()"
+                class="blueButton buttonGroupButton" (click)="toggleProfileFormEdit()">
+                <div class='buttonFlexManager' fxLayout="row">
+                  <div class='buttonIconWrapper'>
+                    <mat-icon>cancel_presentation</mat-icon>
+                  </div>
+                  <div class='buttonTextWrapper'>
+                    &nbsp; {{this.textService.text.close}}
+                  </div>
+                </div>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </form>
+    </div>
+    <mat-card class="deleteCard" *ngIf='canEdit()'>
+      <span>{{this.textService.text.deleteWarning}} </span>
+      <div class='buttonGroup'>
+        <button class="redButton buttonGroupButton" [disabled]="disableDeleteButton()"
+          [matTooltip]="this.textService.text.deleteToolTip" mat-raised-button (click)="handleDelete()">
+          <div class='buttonFlexManager' fxLayout="row">
+            <div class='buttonIconWrapper'>
+              <mat-icon>delete_forever</mat-icon>
+            </div>
+            <div class='buttonTextWrapper'>
+              &nbsp;{{this.textService.text.deleteAccount}}
+            </div>
+          </div>
+        </button>
+      </div>
+    </mat-card>
+
+  </div>
+</div>

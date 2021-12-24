@@ -1,0 +1,64 @@
+.errorPageWrapper {
+  width: 95%;
+  flex-wrap: wrap;
+  max-width:1500px;
+}
+
+.errorObjectWrapper,
+.errorPageWrapper,
+.errorRobotWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: fit-content;
+  margin: auto;
+  max-width: 1500px;
+  flex-wrap: wrap;
+}
+
+.errorObjectWrapper,.errorPageWrapper {
+  flex-direction: column;
+}
+
+.errorPageWrapper{
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.imageWrapper {
+  margin: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.imageWrapper img {
+  width: 100%;
+  max-width: 300px;
+}
+
+.errorCode {
+  font-size: 150px;
+  text-align: center;
+}
+
+mat-card {
+  width: 85%;
+  min-width: 300px;
+  max-width: 1200px;
+}
+
+.errorMessage {
+  width: 90%;
+  max-width: 500px;
+  min-width: 270px;
+  text-align: center;
+}
+
+.header{
+  border-bottom-color:black;
+  border-bottom-width:2px;
+  border-bottom-style: solid;
+  width:300px;
+  text-align: center;
+}

@@ -1,0 +1,14 @@
+<div class="wrapper">
+    <div class='header'>
+        <div class='logTitle'>
+            <mat-icon class='appThemeText'>{{icon}}</mat-icon>
+            <div class='realTitle'>{{title}}&nbsp;&nbsp;&nbsp;</div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="message" *ngIf="message && !hideMessage">{{message}}</div>
+    <div class="content">
+        <ng-content>
+        </ng-content>
+    </div>
+</div>

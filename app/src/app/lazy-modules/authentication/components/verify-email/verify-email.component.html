@@ -1,0 +1,54 @@
+<div class="wrapper">
+  <div class="sendToFront">
+    <mat-card class='verifyCard'>
+      <mat-card-header class='noMarginHeaderText'>
+        <mat-card-title>
+          <h1>
+            <mat-icon class='appThemeText'>email</mat-icon>{{this.textService.text.verifyEmail}}
+          </h1>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-divider></mat-divider>
+      <div class="cardText">
+        <div>
+          {{this.textService.text.applicationName}} {{this.textService.text.whyAppRequiresEmail}}
+          us.
+        </div>
+      </div>
+
+      <div class="greyText emailWrapper">{{this.textService.text.questionsContact}}:
+        <span class="email appThemeText">{{this.textService.text.supportEmail}}</span>
+      </div>
+
+      <br>
+
+      <div class='navLink appThemeText'>
+        <span class="clickToReg"><a class='appThemeText' (click)='
+          this.routesService.navigate([this.routesService.paths.signIn])'>{{this.textService.text.signIn}}</a>
+          <mat-icon>perm_identity</mat-icon>
+        </span>
+      </div>
+
+      <div class='navLink appThemeText'>
+        <span class="clickToReg">
+          <!-- RouterLink refused to work here -->
+          <a class='appThemeText' (click)='
+          this.routesService.navigate([this.routesService.paths.homepage])'>
+            {{this.textService.text.returnHomeLeaveVerify}}
+          </a>
+          <mat-icon>home</mat-icon>
+        </span>
+      </div>
+    </mat-card>
+  </div>
+  <div class="waveWrapper waveAnimation appGradientBackgroundColor">
+    <div class="waveWrapperInner bgMiddle">
+      <div class="wave waveMiddle" style="background-image: url('./assets/homepage/wave-mid.png')">
+      </div>
+    </div>
+    <div class="waveWrapperInner bgBottom">
+      <div class="wave waveBottom" style="background-image: url('./assets/homepage/wave-bot.png')">
+      </div>
+    </div>
+  </div>
+</div>
