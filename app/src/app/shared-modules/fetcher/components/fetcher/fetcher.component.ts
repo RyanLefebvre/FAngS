@@ -123,7 +123,6 @@ export class FetcherComponent implements OnInit, OnChanges {
         this.onFetchResponse.emit(formattedResponse);
       }
     } catch (error) {
-      console.log('here is the error', error);
       this.error = this.http.getFormattedErrorResponse(error);
     } finally {
       this.initialFetchCompleted = true;

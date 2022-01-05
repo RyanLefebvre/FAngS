@@ -10,3 +10,8 @@ node_modules/
 
 #api docs
 swagger.json
+
+
+#firebase crap
+.firebasesrc
+firebase.json

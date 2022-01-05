@@ -1,7 +1,7 @@
 import { FormControl } from '@angular/forms';
 import { ValidateEmail } from './email-validator';
 import { ValidatePassword } from './password-validator';
-import { ValidateUsername } from './username-validator';
+import { getTextValidation } from './text-validator';
 
 describe('Shared Validators', () => {
   let control: FormControl;
@@ -86,28 +86,25 @@ describe('Shared Validators', () => {
   describe('ValidateUsername', () => {
     it('should return null when username is null', () => {
       control = new FormControl(null);
-      expect(ValidateUsername(control)).toBe(null);
+      expect(getTextValidation()(control)).toBe(null);
     });
-
     it('should return { usernameInvalid : true } when username is not a string', () => {
       const username = 1;
       control = new FormControl(username);
-      expect(ValidateUsername(control)).toEqual({ INVALID_USERNAME: true });
+      expect(getTextValidation()(control)).toEqual({ INVALID_TEXT: true });
     });
-
     it('should return { usernameInvalid : true } when username has an invalid length', () => {
       let username = 'user';
       for (let i = 0; i < 25; i++) {
         username += 'er';
       }
       control = new FormControl(username);
-      expect(ValidateUsername(control)).toEqual({ INVALID_USERNAME: true });
+      expect(getTextValidation()(control)).toEqual({ INVALID_TEXT: true });
     });
-
     it('should return null when the username is valid', () => {
       const username = 'username';
       control = new FormControl(username);
-      expect(ValidateUsername(control)).toBe(null);
+      expect(getTextValidation()(control)).toBe(null);
     });
   });
 });

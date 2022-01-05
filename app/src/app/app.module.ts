@@ -7,6 +7,7 @@ import { AuthenticationService } from './services/firebase/authentication.servic
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { OnlyNotLoggedInUsersGuard } from './services/route-guards/only-not-logged-in-users-guard.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -69,7 +70,7 @@ const routes = [
   {
     path: '**',
     redirectTo: ERROR_MODULE_BASE_ROUTE,
-    pathMatch: 'full', // THIS SHOULD BE A 404 page
+    pathMatch: 'full',
   },
 ];
 
@@ -87,6 +88,7 @@ const routes = [
     AngularFireAuthModule,
     AngularFirestoreModule,
     AngularFireFunctionsModule,
+    AngularFireStorageModule,
     MaterialModule,
     DirectivesModule,
     BrowserModule,

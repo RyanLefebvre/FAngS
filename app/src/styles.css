@@ -35,6 +35,7 @@
   padding-left:14px;
 }
 
+/* USER PAGE OVERRIDES */
 .noPaddingFormField .mat-form-field-infix{
   padding: 7px;
   width:auto;
@@ -47,6 +48,28 @@
 .noPaddingFormField .mat-form-field-wrapper{
   margin-bottom: -1.0em;
 }
+
+.panelFormField .mat-form-field-wrapper{
+  width:100%;
+}
+
+.infoPanels 
+.noPaddingFormField 
+.mat-form-field-wrapper 
+.mat-form-field-flex 
+.mat-form-field-infix{
+  border-top:0;
+}
+
+.mat-form-field-label{
+  color: var(--main-color) !important;
+}
+
+.growWhenEditingBio mat-form-field .mat-form-field-wrapper{
+  height: 100%;
+  padding-bottom: 0;
+}
+/* END OVERRIDES */
 
 .invisible{
   visibility: hidden;
