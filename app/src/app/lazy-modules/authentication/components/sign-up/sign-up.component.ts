@@ -5,7 +5,7 @@ import { ValidateEmail } from 'src/app/shared-validators/email-validator';
 import { DialogCreatorService } from 'src/app/shared-modules/dialogs/services/dialog-creator.service';
 import { AuthenticationService } from 'src/app/services/firebase/authentication.service';
 import { Subscription } from 'rxjs';
-import { ValidateUsername } from 'src/app/shared-validators/username-validator';
+import { getTextValidation } from 'src/app/shared-validators/text-validator';
 import { UserProfile } from '../../../../../../../shared/classes/user-profile';
 import { RoutesService } from 'src/app/services/constants/routes.service';
 import { UserCreateData } from '../../../../../../../shared/classes/user-create-data';
@@ -84,7 +84,7 @@ export class SignUpComponent implements OnInit {
   registerForm: FormGroup = this.fb.group({
     [this.FORM_CONTROL_USERNAME]: [
       null,
-      [Validators.required, ValidateUsername],
+      [Validators.required, getTextValidation()],
     ],
     [this.FORM_CONTROL_PASSWORD]: [
       null,

@@ -51,4 +51,46 @@ export class UserProfile {
      */
     isPublic: boolean;
 
+    /**
+     * First name of the user.
+     */
+    firstName ?:string;
+
+    /**
+     * Last name of the user.
+     */
+    lastName ?:string;
+
+    /**
+     * Website that the user wants to link people to. This is the value
+     * that gets displayed in the UI.
+     */
+     website ?:string;
+
+    /**
+    * Website that the user wants to link people to. This is the value
+    * used as the actual link
+    */
+    websiteURL ?:string;
+
+    /**
+     * Where the user is, if they choose to share.
+     */
+     location ?:string;
+
+     /**
+      * Max 140 character bio.
+      */
+     bio ?:string;
+
+     /**
+      * Optional phone number.
+      */
+     phoneNumber ?:string;
+
+     /**
+      * URL of the users profile picture
+      */
+     profilePictureURL?:string;
+
 }

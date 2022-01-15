@@ -6,11 +6,12 @@ import { ProfileService } from 'src/app/services/util/profile.service';
 import { SnackBarService } from 'src/app/shared-modules/material/snack-bar-manager.service';
 import { DialogCreatorService } from 'src/app/shared-modules/dialogs/services/dialog-creator.service';
 import { ValidateEmail } from 'src/app/shared-validators/email-validator';
-import { ValidateUsername } from 'src/app/shared-validators/username-validator';
+import { getTextValidation } from 'src/app/shared-validators/text-validator';
 import { UserProfile } from '../../../../../../../shared/classes/user-profile';
 import { UserEditData } from '../../../../../../../shared/classes/user-edit-data';
 import { TextService } from 'src/app/services/constants/text.service';
 import { TimeService } from 'src/app/services/util/time-constant.service';
+import { StorageService } from 'src/app/services/firebase/storage.service';
 
 /**
  * Component responsible for viewing and editing user profile property information.
@@ -63,6 +64,46 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
   FORM_CONTROL_DISPLAY_PROF_VISIBILITY = 'displayProfileAccess';
 
   /**
+   * Key for profile bio form control.
+   */
+  FORM_CONTROL_BIO = 'bio';
+
+  /**
+   * Key for profile first name form control.
+   */
+  FORM_CONTROL_FIRST_NAME = 'firstName';
+
+  /**
+   * Key for profile last name form control.
+   */
+  FORM_CONTROL_LAST_NAME = 'lastName';
+
+  /**
+   * Key for profile website form control.
+   */
+  FORM_CONTROL_WEBSITE = 'website';
+
+  /**
+   * Key for profile website form control.
+   */
+  FORM_CONTROL_WEBSITE_URL = 'websiteURL';
+
+  /**
+   * Key for profile website form control.
+   */
+  FORM_CONTROL_LOCATION = 'location';
+
+  /**
+   * Key for phone number form control.
+   */
+  FORM_CONTROL_PHONE_NUMBER = 'phoneNumber';
+
+  /**
+   * Display key for phone number form control.
+   */
+  FORM_CONTROL_PHONE_NUMBER_DISPLAY = 'phoneNumberDisplay';
+
+  /**
    * True if the spinner indicating a loading operation should be displayed. False otherwise.
    */
   showSpinner = false;
@@ -90,6 +131,28 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
   isEditing = false;
 
   /**
+   * True if the user has a profile picture and it should be removed. False otherwise.
+   */
+  removeCurrentProfilePicture = false;
+
+  /**
+   * Image preview URL that contains the value of a local file the user plans
+   * to change their profile picture to.
+   */
+  profPreviewURL: string | ArrayBuffer = null;
+
+  /**
+   * Reference to the latest file used as a profile picture to
+   * change to when uploaded through the image input
+   */
+  newProfilePicture: any = null;
+
+  /**
+   * Reference to the default profile picture if one does not exist.
+   */
+  defaultProfileURL = './assets/profilePlaceholder.png';
+
+  /**
    * @ignore
    */
   constructor(
@@ -100,7 +163,8 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
     public snackBar: SnackBarService,
     public prof: ProfileService,
     public textService: TextService,
-    public timeService: TimeService
+    public timeService: TimeService,
+    public storageService: StorageService
   ) {}
 
   /**
@@ -194,6 +258,17 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
    * out to make sure that their new email gets verified.
    */
   async handleSubmit(): Promise<void> {
+    const smallEnough =
+      !this.newProfilePicture ||
+      (this.newProfilePicture &&
+        this.newProfilePicture.size <=
+          this.storageService.MAX_PROFILE_IMAGE_SIZE);
+    if (!smallEnough) {
+      this.snackBar.showFailureMessage(
+        this.textService.text.profilePictureTooBigMessage
+      );
+      return;
+    }
     this.showSpinner = true;
     this.showEmailChangeFailure = this.showEmailChangeSuccess = false;
     const userData: UserEditData = {
@@ -207,6 +282,26 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
           : false,
       lastEdit: this.timeService.getTimeStamp(),
       uid: this.user.uid,
+      firstName:
+        this.profileEditForm.controls[
+          this.FORM_CONTROL_FIRST_NAME
+        ].value.trim(),
+      lastName:
+        this.profileEditForm.controls[this.FORM_CONTROL_LAST_NAME].value.trim(),
+      website:
+        this.profileEditForm.controls[this.FORM_CONTROL_WEBSITE].value.trim(),
+      websiteURL:
+        this.profileEditForm.controls[
+          this.FORM_CONTROL_WEBSITE_URL
+        ].value.trim(),
+      location:
+        this.profileEditForm.controls[this.FORM_CONTROL_LOCATION].value.trim(),
+      bio: this.profileEditForm.controls[this.FORM_CONTROL_BIO].value.trim(),
+      phoneNumber:
+        this.profileEditForm.controls[
+          this.FORM_CONTROL_PHONE_NUMBER
+        ].value.trim(),
+      profilePictureURL: await this.getUpdatedProfileURL(),
     };
     const emailDifferentBeforeRequest: boolean =
       this.user.email != userData.email;
@@ -241,7 +336,11 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
       };
       this.profileEditForm = this.generateNewProfileEditForm(this.user);
     }
-    this.showSpinner = this.isEditing = false;
+    this.showSpinner =
+      this.isEditing =
+      this.removeCurrentProfilePicture =
+        false;
+    this.newProfilePicture = this.profPreviewURL = null;
   }
 
   /**
@@ -296,10 +395,19 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
   }
 
   /**
+   * Returns the value if it is truthy or not an empty string,
+   * or a dash otherwise.
+   */
+  valueOrLine(
+    value: Record<string, unknown> | string
+  ): Record<string, unknown> | string {
+    return !value ? '-' : value;
+  }
+
+  /**
    * Generates a new profile edit form.
    */
   generateNewProfileEditForm(currentUser: UserProfile): FormGroup {
-    const valueOrLine = (value): string => (value === null ? '-' : value);
     const isPublicValue: string = currentUser.isPublic
       ? this.prof.PROF_VIS_PUBLIC
       : this.prof.PROF_VIS_PRIVATE;
@@ -309,10 +417,10 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
           value: currentUser.username,
           disabled: this.disableUserProfileFormControls(),
         },
-        ValidateUsername,
+        getTextValidation(),
       ],
       [this.FORM_CONTROL_DISPLAY_USERNAME]: {
-        value: valueOrLine(currentUser.username),
+        value: this.valueOrLine(currentUser.username),
         disabled: this.disableUserProfileFormControls(),
       },
       [this.FORM_CONTROL_EMAIL]: [
@@ -323,7 +431,7 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
         [Validators.required, ValidateEmail],
       ],
       [this.FORM_CONTROL_DISPLAY_EMAIL]: {
-        value: valueOrLine(currentUser.email),
+        value: this.valueOrLine(currentUser.email),
         disabled: this.disableUserProfileFormControls(),
       },
       [this.FORM_CONTROL_PROF_VISIBILITY]: {
@@ -334,7 +442,132 @@ export class UserPropertiesComponent implements OnInit, OnChanges {
         value: isPublicValue,
         disabled: this.disableUserProfileFormControls(),
       },
+      [this.FORM_CONTROL_FIRST_NAME]: [
+        {
+          value: currentUser.firstName,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(),
+      ],
+      [this.FORM_CONTROL_LAST_NAME]: [
+        {
+          value: currentUser.lastName,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(),
+      ],
+      [this.FORM_CONTROL_LOCATION]: [
+        {
+          value: currentUser.location,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(),
+      ],
+      [this.FORM_CONTROL_WEBSITE]: [
+        {
+          value: currentUser.website,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(),
+      ],
+      [this.FORM_CONTROL_WEBSITE_URL]: [
+        {
+          value: currentUser.websiteURL,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(2000),
+      ],
+      [this.FORM_CONTROL_BIO]: [
+        {
+          value: currentUser.bio,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(140),
+      ],
+      [this.FORM_CONTROL_PHONE_NUMBER]: [
+        {
+          value: currentUser.phoneNumber,
+          disabled: this.disableUserProfileFormControls(),
+        },
+        getTextValidation(25), // could definitely make this better with real phone validation
+      ],
+      [this.FORM_CONTROL_PHONE_NUMBER_DISPLAY]: {
+        value: this.valueOrLine(currentUser.phoneNumber),
+        disabled: this.disableUserProfileFormControls(),
+      },
     });
     return group;
+  }
+
+  /**
+   * Updates a reference to the new profile picture the
+   * user wants to change to when editing the form since.
+   * Angular material doesn't support this.
+   */
+  onImageInputChange(event): void {
+    this.newProfilePicture = event.target.files[0];
+    if (this.newProfilePicture) {
+      this.removeCurrentProfilePicture = false;
+      const reader = new FileReader();
+      reader.readAsDataURL(this.newProfilePicture);
+      reader.onload = () => {
+        this.profPreviewURL = reader.result;
+      };
+    } else {
+      this.profPreviewURL = null;
+      this.newProfilePicture = null;
+    }
+  }
+
+  /**
+   * Returns the url of the image to display in the profile
+   * picture circle.
+   *
+   * If the user is not editing and  has a profile picture, that is what gets
+   * displayed, otherwise a generic placeholder is shown.
+   *
+   * If the user is editing and they have a profile picture then that is whats
+   * displayed unless the profile change input has a valid value or the remove profile
+   * picture button is pressed which will always wipe out the display and replace
+   * it with the default profile picture.
+   */
+  getProfileImageURL(): string | ArrayBuffer {
+    return this.isEditing
+      ? this.removeCurrentProfilePicture
+        ? this.defaultProfileURL
+        : this.profPreviewURL ||
+          this.user.profilePictureURL ||
+          this.defaultProfileURL
+      : this.user.profilePictureURL || this.defaultProfileURL;
+  }
+
+  /**
+   * Click handler for remove profile picture button.
+   */
+  removeProfile(): void {
+    this.removeCurrentProfilePicture = true;
+  }
+
+  /**
+   * Click handler for the undo remove profile picture.
+   */
+  undoRemoveProfile(): void {
+    this.removeCurrentProfilePicture = false;
+  }
+
+  /**
+   * Gets the URL for the users profile picture
+   * based on component state when submit is pressed.
+   */
+  async getUpdatedProfileURL(): Promise<string> {
+    if (this.newProfilePicture && !this.removeCurrentProfilePicture) {
+      return await this.storageService.uploadProfilePicture(
+        this.newProfilePicture
+      );
+    } else if (this.removeCurrentProfilePicture) {
+      return null;
+    } else {
+      return this.user.profilePictureURL;
+    }
   }
 }

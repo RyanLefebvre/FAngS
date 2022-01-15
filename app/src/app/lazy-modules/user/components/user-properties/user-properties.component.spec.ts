@@ -11,6 +11,8 @@ import { UserPropertiesComponent } from './user-properties.component';
 import { autoSpy } from 'autoSpy';
 import { UserProfile } from '../../../../../../../shared/classes/user-profile';
 import { ApiResponse } from '../../../../../../../shared/classes/api-response';
+import { StorageService } from 'src/app/services/firebase/storage.service';
+import { ReadVarExpr } from '@angular/compiler';
 
 describe('UserViewEditComponent', () => {
   let component: UserPropertiesComponent;
@@ -146,6 +148,30 @@ describe('UserViewEditComponent', () => {
         [component.FORM_CONTROL_PROF_VISIBILITY]: {
           value: component.prof.PROF_VIS_PRIVATE,
         },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_FIRST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LAST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE_URL]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LOCATION]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_BIO]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
+        },
       },
     } as any;
     component.userService.editUserProfile = (user): any => {
@@ -156,6 +182,18 @@ describe('UserViewEditComponent', () => {
     expect(component.user.username).toBe('some username' + 'someOtherChars');
     expect(component.isEditing).toBe(false);
     expect(component.showSpinner).toBe(false);
+  });
+
+  it('should show a failure message and return early if the new profile picture from the user is too big', async () => {
+    component.storageService.MAX_PROFILE_IMAGE_SIZE = 10;
+    component.textService = {
+      text: { profilePictureTooBigMessage: 'too big to upload!' } as any,
+    };
+    component.newProfilePicture = {
+      size: 11,
+    } as any;
+    await component.handleSubmit();
+    expect(component.snackBar.showFailureMessage).toHaveBeenCalled();
   });
 
   it('should still set isEditing and showSpinner to false even if the request errors out', async () => {
@@ -171,6 +209,7 @@ describe('UserViewEditComponent', () => {
       wasDeleted: false,
       isPublic: true,
     } as UserProfile;
+    component.getUpdatedProfileURL = jasmine.createSpy();
     component.profileEditForm = {
       controls: {
         [component.FORM_CONTROL_USERNAME]: {
@@ -179,6 +218,30 @@ describe('UserViewEditComponent', () => {
         [component.FORM_CONTROL_EMAIL]: { value: component.user.email },
         [component.FORM_CONTROL_PROF_VISIBILITY]: {
           value: component.prof.PROF_VIS_PUBLIC,
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_FIRST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LAST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE_URL]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LOCATION]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_BIO]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
         },
       },
     } as any;
@@ -214,6 +277,30 @@ describe('UserViewEditComponent', () => {
         [component.FORM_CONTROL_EMAIL]: { value: 'someOtherEmail@gmail.com' },
         [component.FORM_CONTROL_PROF_VISIBILITY]: {
           value: component.prof.PROF_VIS_PRIVATE,
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_FIRST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LAST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE_URL]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LOCATION]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_BIO]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
         },
       },
     } as any;
@@ -256,6 +343,30 @@ describe('UserViewEditComponent', () => {
         [component.FORM_CONTROL_EMAIL]: { value: changedEmail },
         [component.FORM_CONTROL_PROF_VISIBILITY]: {
           value: component.prof.PROF_VIS_PRIVATE,
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_FIRST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LAST_NAME]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_WEBSITE_URL]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_LOCATION]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_BIO]: {
+          value: '',
+        },
+        [component.FORM_CONTROL_PHONE_NUMBER]: {
+          value: '',
         },
       },
     } as any;
@@ -429,6 +540,127 @@ describe('UserViewEditComponent', () => {
     const group = component.generateNewProfileEditForm(user);
     expect(group[component.FORM_CONTROL_DISPLAY_USERNAME].value).toBe('-');
   });
+
+  it('should set the profile picture state variables to null if the event is null when onImageChange is called', () => {
+    component.profPreviewURL = component.newProfilePicture =
+      'somethingThatIsnNull' as any;
+    component.onImageInputChange({
+      target: {
+        files: [],
+      },
+    });
+    expect(component.profPreviewURL).toBe(null);
+    expect(component.newProfilePicture).toBe(null);
+  });
+
+  it('should set the profile picture state variables to the reader result when onImageChange is called with a valid event', () => {
+    component.profPreviewURL = component.newProfilePicture =
+      'somethingThatIsnNull' as any;
+    const fakeReader = {
+      readAsDataURL: jasmine.createSpy(),
+      result: 'someResult',
+    } as any;
+    spyOn(window, 'FileReader').and.returnValue(fakeReader);
+    component.onImageInputChange({
+      target: {
+        files: [{}],
+      },
+    });
+    fakeReader.onload();
+    expect(fakeReader.readAsDataURL).toHaveBeenCalled();
+    expect(component.profPreviewURL).toBe(fakeReader.result);
+    expect(component.removeCurrentProfilePicture).toBe(false);
+  });
+
+  it('should return the default profile URL when isEditing and removeCurrentProfile picture are true', () => {
+    component.isEditing = component.removeCurrentProfilePicture = true;
+    expect(component.getProfileImageURL()).toBe(component.defaultProfileURL);
+  });
+
+  it('should return the profile preview URL when isEditing is true, removeCurrentProfile picture is false and the preview URL exists', () => {
+    component.profPreviewURL = 'someValidValue';
+    component.isEditing = true;
+    component.removeCurrentProfilePicture = false;
+    expect(component.getProfileImageURL()).toBe(component.profPreviewURL);
+  });
+
+  it('should return the users profile picture URL when isEditing is true, removeCurrentProfile picture is false and the preview URL doesnt exist but the user has a profile picture', () => {
+    component.profPreviewURL = null;
+    component.user = {
+      profilePictureURL: 'someValidURL',
+    } as any;
+    component.isEditing = true;
+    component.removeCurrentProfilePicture = false;
+    expect(component.getProfileImageURL()).toBe(
+      component.user.profilePictureURL
+    );
+  });
+
+  it('should return the default picture URL when isEditing is true, removeCurrentProfile picture is false and the preview URL doesnt exist and user has no profile picture', () => {
+    component.profPreviewURL = null;
+    component.user = {} as any;
+    component.isEditing = true;
+    component.removeCurrentProfilePicture = false;
+    expect(component.getProfileImageURL()).toBe(component.defaultProfileURL);
+  });
+
+  it('should return the users profile picture URL when isEditing is false, removeCurrentProfile picture is false and the preview URL doesnt exist but the user has a profile picture', () => {
+    component.profPreviewURL = null;
+    component.user = {
+      profilePictureURL: 'someValidURL',
+    } as any;
+    component.isEditing = false;
+    component.removeCurrentProfilePicture = false;
+    expect(component.getProfileImageURL()).toBe(
+      component.user.profilePictureURL
+    );
+  });
+
+  it('should return the default picture URL when isEditing is false, removeCurrentProfile picture is false and the preview URL doesnt exist and user has no profile picture', () => {
+    component.profPreviewURL = null;
+    component.user = {} as any;
+    component.isEditing = false;
+    component.removeCurrentProfilePicture = false;
+    expect(component.getProfileImageURL()).toBe(component.defaultProfileURL);
+  });
+
+  it('should set the remove flag when removeProfile is called', () => {
+    component.removeCurrentProfilePicture = false;
+    component.removeProfile();
+    expect(component.removeCurrentProfilePicture).toBe(true);
+  });
+
+  it('should disable the remove flag when undoRemoveProfile is called', () => {
+    component.removeCurrentProfilePicture = true;
+    component.undoRemoveProfile();
+    expect(component.removeCurrentProfilePicture).toBe(false);
+  });
+
+  it('should return null when getUpdatedProfileURL() is called if the removeCurrentProfile pciture condition is the first truthy', async () => {
+    component.newProfilePicture = null;
+    component.removeCurrentProfilePicture = true;
+    expect(await component.getUpdatedProfileURL()).toBe(null);
+  });
+
+  it('should return the result of the storageServices upload when removeCurrentProfilePicture() is called and a new picture is submitted', async () => {
+    component.newProfilePicture = 'somePicture';
+    component.removeCurrentProfilePicture = false;
+    component.storageService.uploadProfilePicture = async () => 'someValue';
+    expect(await component.getUpdatedProfileURL()).toBe(
+      await component.storageService.uploadProfilePicture(
+        component.newProfilePicture
+      )
+    );
+  });
+
+  it('should return the users current profile picture if they are not removing it or selecting a new one', async () => {
+    component.newProfilePicture = null;
+    component.removeCurrentProfilePicture = false;
+    component.user = { profilePictureURL: 'someURL' } as any;
+    expect(await component.getUpdatedProfileURL()).toBe(
+      component.user.profilePictureURL
+    );
+  });
 });
 
 function setup() {
@@ -440,6 +672,7 @@ function setup() {
   const prof = autoSpy(ProfileService);
   const textService = autoSpy(TextService);
   const timeService = autoSpy(TimeService);
+  const storageService = autoSpy(StorageService);
   const builder = {
     auth,
     fb,
@@ -461,7 +694,8 @@ function setup() {
         snackBar,
         prof,
         textService,
-        timeService
+        timeService,
+        storageService
       );
     },
   };

@@ -1,11 +1,12 @@
 .maxWidth {
   display: block;
   margin: auto;
-  max-width: 800px;
-  height:80vh;
+  max-width: 1200px;
   display: flex;
   align-items: center;
   justify-content:center;
+  margin-top:20px;
+  margin-bottom:20px;
 }
 
 h1 {
@@ -14,8 +15,7 @@ h1 {
   text-overflow: ellipsis;
 }
 
-mat-form-field,
-.fake-mat-form-field {
+.lhsCard mat-form-field{
   width: 90%;
   text-align: center;
   width: 90%;
@@ -79,7 +79,9 @@ mat-button-toggle {
   border-color: red;
   margin-top:50px;
   margin-bottom:50px;
+  max-width:500px;
   width:95%;
+  padding:10px;
 }
 
 .matLabelText {
@@ -181,7 +183,6 @@ app-spinner-wheel {
 }
 
 .profEditGroup{
-  height: 120px;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -211,15 +212,188 @@ app-spinner-wheel {
 }
 
 .userActive, .userCreated{
-    font-size: small;
-    text-align: left;
-    margin-bottom: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    width:220px;
+  font-size: small;
+  text-align: left;
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width:220px;
 }
 
 .mat-form-field-infix{
   padding:0;
+}
+
+.formFlexManager{
+  display:flex;
+  flex-direction: row-reverse;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  flex-wrap: wrap-reverse;
+}
+
+.lhsCard{
+  flex-basis:60%;
+  min-width:300px;
+  flex-grow: 1;
+  padding:5px;
+  align-self:center;
+}
+
+.lhsCard mat-card-content{
+  width:100%;
+}
+
+.rhsInfo{
+  flex-basis:25%;
+  min-width:300px;
+  flex-grow: 1;
+  padding:5px;
+  align-items: center;
+  justify-content:space-evenly;
+}
+
+.imageHolder{
+  border-radius:50%;
+  overflow:hidden;
+  width:280px;
+  height:280px;
+  margin:auto;
+  display: block;
+}
+
+.imageHolder img{
+  width:100%;
+  height:100%;
+}
+
+element.style {
+  text-align: left;
+}
+
+.firstNameLastName,
+.website,
+.location,
+.bio {
+  font-size: large;
+  text-align:left;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  overflow-y: auto;
+}
+
+.firstNameLastName,
+.website,
+.location {
+  height:50px;
+}
+
+.info-panels div mat-form-field {
+  text-align: left !important;
+}
+
+.bio{
+  align-items: flex-start;
+  font-size: medium;
+  height:135px;
+  overflow:auto;
+}
+
+.rhsIcon{
+  margin-right:10px;
+}
+
+.deleteWarning{
+  font-size:large;
+}
+
+.firstLastNameInputsHolder, .websiteInputsHolder{
+  display:flex;
+  align-items:center;
+}
+
+.firstLastNameInputsHolder mat-form-field, .websiteInputsHolder mat-form-field{
+  flex-basis:45%;
+}
+
+.firstLastNameInputsHolder .lastNameInput,
+.websiteInputsHolder .websiteURLInput{
+  padding-left:20px;
+}
+
+.bio mat-form-field {
+  height:105px;
+  width: 80%;
+}
+
+.bio mat-form-field textarea{
+  resize: none;
+}
+
+mat-label{
+  font-size: small;
+}
+
+.growWhenEditing{
+  height:80px;
+}
+
+.growWhenEditingBio{
+  height:145px;
+}
+
+.growWhenEditingBio mat-form-field {
+  height:100%;
+  width: 80%;
+}
+
+.growWhenEditingBio mat-form-field .mat-form-field-wrapper{
+  height: 100%;
+  padding-bottom: 0;
+}
+
+.bold{
+  font-weight:bold;
+  font-size: medium;
+}
+
+.location .panelFormField{
+  width: 80%;
+  max-width: 420px;
+}
+
+.buttonGroupsWrapper{
+  display: flex;
+  align-items:center;
+  justify-content:space-evenly;
+  flex-wrap: wrap;
+}
+
+.buttonGroup{
+  min-width: 225px;
+}
+
+.imageUpload{
+  font-size: medium;
+  margin-bottom: 10px;    
+  margin-top: 10px;
+  position: relative;
+  bottom: 10px;
+}
+
+.imageUploadWrapper .appThemeText{
+  font-size: x-large;
+  font-weight: bold
+}
+
+.profilePicButtonGroup{ 
+  position: relative;
+  bottom: 20px;
+  margin-left: 0;
 }

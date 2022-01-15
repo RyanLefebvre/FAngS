@@ -185,6 +185,20 @@ export const getUserProfile = functions.https.onCall(
  *               type: boolean
  *             lastEdit:
  *               type: integer
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             website:
+ *               type: string
+ *             websiteURL:
+ *               type: string
+ *             location:
+ *               type: string
+ *             bio:
+ *               type: string
+ *             phoneNumber:
+ *               type: string
  *     responses:
  *       200:
  *         description: Returns user profile requested to edit.
@@ -206,6 +220,14 @@ const editUserProfileOperation = async (
   userToBeEdited.email = userEditData.email;
   userToBeEdited.lastEdit = userEditData.lastEdit;
   userToBeEdited.isPublic = userEditData.isPublic;
+  userToBeEdited.firstName = userEditData.firstName;
+  userToBeEdited.lastName = userEditData.lastName;
+  userToBeEdited.website = userEditData.website;
+  userToBeEdited.websiteURL = userEditData.websiteURL;
+  userToBeEdited.location = userEditData.location;
+  userToBeEdited.bio = userEditData.bio;
+  userToBeEdited.phoneNumber = userEditData.phoneNumber;
+  userToBeEdited.profilePictureURL = userEditData.profilePictureURL;
   await updateUserInDB(userToBeEdited);
   return userToBeEdited;
 };
@@ -340,9 +362,13 @@ export const getUserProfileFromUID = async (
     .collection(USER_COLLECTION_NAME)
     .doc(uid)
     .get()
-    .then((snapshot) => {
-      userProfile = convertUserProfileFromSnapshot(snapshot);
-    });
+    .then(
+      (
+        snapshot: FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>
+      ) => {
+        userProfile = convertUserProfileFromSnapshot(snapshot);
+      }
+    );
   return userProfile;
 };
 

@@ -16,7 +16,7 @@ export class UserEditData {
      * be a valid string with less than or equal to 25 characters. 
      * A value of null means that no username was provided.
      */
-    username: string;
+    username?: string;
 
     /**
     * User's email address.
@@ -32,5 +32,47 @@ export class UserEditData {
      * Timestamp of the last edit to the user profile.
      */
     lastEdit: number;
+
+    /**
+     * First name of the user.
+     */
+    firstName ?:string;
+
+    /**
+     * Last name of the user.
+     */
+    lastName ?:string;
+
+    /**
+     * Website that the user wants to link people to. This is the value
+     * that gets displayed in the UI.
+     */
+     website ?:string;
+
+    /**
+    * Website that the user wants to link people to. This is the value
+    * used as the actual link
+    */
+    websiteURL ?:string;
+
+    /**
+     * Where the user is, if they choose to share.
+     */
+     location ?:string;
+
+     /**
+      * Max 140 character bio.
+      */
+     bio ?:string;
+
+     /**
+      * Optional phone number.
+      */
+     phoneNumber ?:string;
+
+     /**
+      * URL of the users profile picture
+      */
+     profilePictureURL?:string;
 
 }
