@@ -80,7 +80,7 @@ Getting the project set up is simple and will only take a few minutes. This guid
     touch environment.ts
 ```
 
-    Inside environment.ts you would have
+Inside environment.ts you would have
     
 ```
     export const environment = {
@@ -138,8 +138,7 @@ Getting the project set up is simple and will only take a few minutes. This guid
 16.  For the cloud functions to work, they need to be deployed. Run the following command. It might take a minute, but your cloud functions will be ready to go.
 
 ```
-    cd FAngS/cloud-functions/functions
-    npm ci
+    firebase deploy --only functions
 ```
 
 17. Verify that the backend unit tests work and show 100% testing coverage using the command below. The output from jest will show you the coverage in your terminal. You should also see a coverage directory that was generated inside the __tests__ directory. It contains an istanbul report with more information. If you open the index.html file inside the coverage directory in a browser you can see exactly which files are covered.
